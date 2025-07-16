@@ -4,22 +4,35 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { mockClients } from "@/data/clients";
 import { Building, Contact, Pencil } from "lucide-react";
+import { mockProjects } from "@/data/projects";
+import StatsWidget from "@/components/Stats/StatsWidget";
+import BarChartSimple from "@/components/Stats/BarChartSimple";
 import ButtonPrimary from "@/components/Button/ButtonPrimary";
 import ModalSubmitClient from "@/components/Modal/ModalSubmitClient";
 
 const BasicInfo = () => {
   const [dataClient, setDataClient] = useState(null);
+  const [stats, setStats] = useState({ projects: 0, bill: 0, tasks: 0, chart: [] });
   // Handle Edit
   const [isEditOpen, setIsEditOpen] = useState(false);
   const handleAddClient = () => {
     setIsEditOpen(false);
   };
 
-  const { id } = useParams();
+const { id } = useParams();
 
-  useEffect(() => {
-    setDataClient(mockClients.find((item) => item.id === id));
-  }, [id]);
+useEffect(() => {
+  const found = mockClients.find((item) => item.id === id);
+  setDataClient(found);
+  const clientProjects = mockProjects.filter((p) => p.clientId === id);
+  const totalBill = clientProjects.reduce((sum, p) => sum + p.billOfMaterials, 0);
+  setStats({
+    projects: clientProjects.length,
+    bill: totalBill,
+    tasks: clientProjects.length * 5,
+    chart: clientProjects.slice(0, 5).map((p) => ({ label: p.name, value: p.billOfMaterials })),
+  });
+}, [id]);
 
   return (
     <div className="space-y-6">
@@ -91,6 +104,22 @@ const BasicInfo = () => {
               </a>
             </div>
           </div>
+        </div>
+      </div>
+      {/* Client statistics */}
+      <div className="space-y-6">
+        <h6 className="text-xl font-semibold">Client Statistics</h6>
+        <div className="grid grid-cols-3 gap-4">
+          <StatsWidget label="Total Projects" value={stats.projects} />
+          <StatsWidget
+            label="Total Bill of Materials"
+            value={`$${stats.bill}`}
+          />
+          <StatsWidget label="Completed Tasks" value={stats.tasks} />
+        </div>
+        <div className="bg-white border border-neutral-400 rounded-lg p-4">
+          <h6 className="text-sm font-semibold mb-2">Bill of Materials by Project</h6>
+          <BarChartSimple data={stats.chart} />
         </div>
       </div>
       <ModalSubmitClient
