@@ -8,7 +8,7 @@ const Skeleton = ({
 }) => {
   return (
     <div
-      className={`animate-pulse bg-neutral-300 ${width} ${height} ${rounded} ${className} mb-5`}
+      className={`skeleton ${width} ${height} ${rounded} ${className} mb-5`}
     ></div>
   );
 };

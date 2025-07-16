@@ -30,3 +30,29 @@ body {
 .phone-input-custom .PhoneInputCountry {
   display: none !important;
 }
+/* Skeleton Loading Styles */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #F1F3F9;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.4), rgba(255,255,255,0));
+  background-repeat: no-repeat;
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
