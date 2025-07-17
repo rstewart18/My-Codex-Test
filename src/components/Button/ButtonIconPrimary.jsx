@@ -1,5 +1,8 @@
 // src/components/ButtonIconPrimary.jsx
 
+import { useEffect, useState } from "react";
+import SkeletonIcon from "../Skeleton/SkeletonIcon";
+
 const ButtonIconPrimary = ({
   onClick,
   icon: Icon,
@@ -8,6 +11,15 @@ const ButtonIconPrimary = ({
   disabled = false,
   isRed = false,
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SkeletonIcon size={sizeIcon || "h-5 w-5"} />;
+
   return (
     <button
       type="button"

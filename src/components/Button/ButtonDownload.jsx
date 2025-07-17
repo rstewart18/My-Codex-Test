@@ -1,8 +1,17 @@
 // src/components/Button/ButtonDownload.js
 
+import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
+import SkeletonIcon from "../Skeleton/SkeletonIcon";
 
 const ButtonDownload = ({ sizeIcon, sizeBtn, fileUrl, fileName }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = fileUrl;
@@ -11,6 +20,8 @@ const ButtonDownload = ({ sizeIcon, sizeBtn, fileUrl, fileName }) => {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (loading) return <SkeletonIcon size={sizeIcon || "h-5 w-5"} />;
 
   return (
     <button

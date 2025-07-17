@@ -8,10 +8,18 @@ import { useSidebar } from "@/context/SidebarContext";
 import { menuDropdownUsers, menuItems, organizations } from "@/data/sidebar";
 import { Tooltip } from "react-tooltip";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import SkeletonSidebar from "../Skeleton/SkeletonSidebar";
 
 export default function Sidebar() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { isCollapsed, setIsCollapsed } = useSidebar();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     setIsCollapsed(isMobile);
@@ -54,6 +62,10 @@ export default function Sidebar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (loading) {
+    return <SkeletonSidebar collapsed={isCollapsed} />;
+  }
 
   return (
     <aside

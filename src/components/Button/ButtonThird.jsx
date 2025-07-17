@@ -1,5 +1,8 @@
 // src/components/Button/ButtonSecondary.jsx
 
+import { useEffect, useState } from "react";
+import SkeletonButton from "../Skeleton/SkeletonButton";
+
 const ButtonThird = ({
   label,
   icon: Icon,
@@ -8,6 +11,15 @@ const ButtonThird = ({
   onClick = () => {},
   isRed = false,
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SkeletonButton />;
+
   return (
     <button
       type={type}

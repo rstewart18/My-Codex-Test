@@ -1,6 +1,18 @@
 // src/components/Button/ButtonPrimary.js
 
+import { useEffect, useState } from "react";
+import SkeletonButton from "../Skeleton/SkeletonButton";
+
 const ButtonPrimary = ({ label, icon: Icon, type = "button", onClick }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SkeletonButton />;
+
   return (
     <button
       type={type}

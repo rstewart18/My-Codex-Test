@@ -1,5 +1,8 @@
 // src/components/ButtonIcon.jsx
 
+import { useState, useEffect } from "react";
+import SkeletonIcon from "../Skeleton/SkeletonIcon";
+
 const ButtonIcon = ({
   onClick,
   icon: Icon,
@@ -9,6 +12,14 @@ const ButtonIcon = ({
   isRed = false,
   isGreen = false,
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SkeletonIcon size={sizeIcon || "h-5 w-5"} />;
   const getTextColor = () => {
     if (disabled) return "text-secondary";
     if (isRed) return "text-danger-200";
