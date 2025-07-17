@@ -1,8 +1,10 @@
 // src/components/Button/ButtonAccessory.jsx
 
 import { Pencil, Save, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import ButtonIcon from "./ButtonIcon";
 import Input from "../Form/Input";
+import SkeletonButton from "../Skeleton/SkeletonButton";
 
 const ButtonAccessory = ({
   id,
@@ -13,6 +15,14 @@ const ButtonAccessory = ({
   onSave = () => {},
   onCancel = () => {},
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SkeletonButton />;
   return (
     <div
       className={`flex items-center justify-between w-full rounded-lg border px-3 ${

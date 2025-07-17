@@ -1,5 +1,8 @@
 // src/components/Button/ButtonElement.jsx
 
+import { useEffect, useState } from "react";
+import SkeletonButton from "../Skeleton/SkeletonButton";
+
 const ButtonElement = ({
   id,
   name = "Element 1",
@@ -7,6 +10,15 @@ const ButtonElement = ({
   selected = false,
   onClick = () => {},
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SkeletonButton />;
+
   return (
     <button
       type="button"
